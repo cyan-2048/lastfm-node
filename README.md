@@ -2,6 +2,12 @@
 
 Read and write to users recent plays on Last.fm.
 
+Changes made by cyan:
+
+-   get rid of underscore dependency
+-   get rid of useragent option(useless imo)
+-   remove crypto dependency(big bloat, only need md5)
+
 ## Installation
 
     npm install lastfm
@@ -9,7 +15,7 @@ Read and write to users recent plays on Last.fm.
 ## Usage
 
     var LastFmNode = require('lastfm').LastFmNode;
-  
+
     var lastfm = new LastFmNode({
       api_key: 'apikey',    // sign-up for a key at http://www.last.fm/api
       secret: 'secret',
@@ -38,33 +44,33 @@ Send request to Last.fm. Requests automatically include the API key and are sign
 
 Methods:
 
-Accepts any Last.fm API method name, eg "artist.getInfo". 
+Accepts any Last.fm API method name, eg "artist.getInfo".
 
 Options:
 
 All options are passed through to Last.fm with the exception of the following.
 
-- *write*
+-   _write_
 
-        Force request to act as a write method. Write methods are signed and sent via POST. Useful for new methods not yet recognised by lastfm-node.
+          Force request to act as a write method. Write methods are signed and sent via POST. Useful for new methods not yet recognised by lastfm-node.
 
-- *signed*
+-   _signed_
 
-        Force request to be signed. See Last.fm API docs for signature details. Useful for new methods not yet recognised by lastfm-node.
+          Force request to be signed. See Last.fm API docs for signature details. Useful for new methods not yet recognised by lastfm-node.
 
-- *handlers*
+-   _handlers_
 
-        Default event handlers to attach to the request object on creation.
+          Default event handlers to attach to the request object on creation.
 
 Events:
 
-- *success(json)*
+-   _success(json)_
 
-        JSON response from Last.fm
+          JSON response from Last.fm
 
-- *error(error)*
+-   _error(error)_
 
-        Ruh-roh. Either a error returned by Last.fm or a transmission error.
+          Ruh-roh. Either a error returned by Last.fm or a transmission error.
 
 ### RecentTracksStream
 
@@ -74,61 +80,61 @@ Returns: a `RecentTracksStream` instance
 
 Methods:
 
-- *start()*
+-   _start()_
 
-        Start streaming recent track info.
+          Start streaming recent track info.
 
-- *stop()*
+-   _stop()_
 
-        Stop streaming recent track info.
+          Stop streaming recent track info.
 
-- *isStreaming()*
+-   _isStreaming()_
 
-        Boolean. True is nowplaying/recent track data is being actively fetched.
+          Boolean. True is nowplaying/recent track data is being actively fetched.
 
-- *on(event, listener)*
+-   _on(event, listener)_
 
-        Adds a listener for the specified event.
+          Adds a listener for the specified event.
 
-- *removeListener(event, listener)*
+-   _removeListener(event, listener)_
 
-        Removes the listener for the specified event.
+          Removes the listener for the specified event.
 
 Options:
 
-- *autostart*
+-   _autostart_
 
-        Start streaming automatically. Defaults to false.
+          Start streaming automatically. Defaults to false.
 
-- *extended*
+-   _extended_
 
-        Includes extended data in each artist, and whether or not the user has loved each track
+          Includes extended data in each artist, and whether or not the user has loved each track
 
-- *handlers*
+-   _handlers_
 
-        Default event handlers to attach to the request object on creation.
+          Default event handlers to attach to the request object on creation.
 
 Events:
 
-- *lastPlayed(track)*
+-   _lastPlayed(track)_
 
-        The user's last scrobbled track.
+          The user's last scrobbled track.
 
-- *nowPlaying(track)*
+-   _nowPlaying(track)_
 
-        Track the user is currently listening to.
+          Track the user is currently listening to.
 
-- *scrobbled(track)*
-        
-        Now playing track has been scrobbled.
+-   _scrobbled(track)_
 
-- *stoppedPlaying(track)*
+          Now playing track has been scrobbled.
 
-        User stopped listening to current track.
+-   _stoppedPlaying(track)_
 
-- *error(error)*
+          User stopped listening to current track.
 
-        Ruh-roh.
+-   _error(error)_
+
+          Ruh-roh.
 
 ### LastFmSession
 
@@ -142,88 +148,87 @@ See the last.fm API documentation for more info on Last.fm authorisation flow.
 
 Options:
 
-- *user*
+-   _user_
 
-        User name, if known.
+          User name, if known.
 
-- *key*
+-   _key_
 
-        Session key, if known.
+          Session key, if known.
 
-- *token*
+-   _token_
 
-        Token supplied by auth.getToken or web flow callback.
+          Token supplied by auth.getToken or web flow callback.
 
-- *retryInterval*
+-   _retryInterval_
 
-        Time in milliseconds to leave between retries. Defaults to 10 seconds.
+          Time in milliseconds to leave between retries. Defaults to 10 seconds.
 
-- *handlers*
+-   _handlers_
 
-        Default event handlers to attach to the session object on creation.
-
+          Default event handlers to attach to the session object on creation.
 
 Public properties:
 
-- *user*
+-   _user_
 
-        The username of the Last.fm user associated with the session.
+          The username of the Last.fm user associated with the session.
 
-- *key*
+-   _key_
 
-        The session key. Either passed in or generated using authorise().
+          The session key. Either passed in or generated using authorise().
 
 Methods:
 
-- *authorise(token, [options])*
+-   _authorise(token, [options])_
 
-        Deprecated. Use lastfm.session({ token: token }) instead.
-        Authorises user with Last.fm api. See last.fm documentation. Options argument has handlers property that has default event handlers to attach to the LastFmSession instance.
+          Deprecated. Use lastfm.session({ token: token }) instead.
+          Authorises user with Last.fm api. See last.fm documentation. Options argument has handlers property that has default event handlers to attach to the LastFmSession instance.
 
-- *on(event, handler)*
+-   _on(event, handler)_
 
-        Adds a listener for the specified event.
+          Adds a listener for the specified event.
 
-- *removeListener(event, handler)*
+-   _removeListener(event, handler)_
 
-        Removes the listener for the specified event.
+          Removes the listener for the specified event.
 
-- *isAuthorised()*
+-   _isAuthorised()_
 
-        Returns true if the session has been authorised or a key was specified in the constructor.
+          Returns true if the session has been authorised or a key was specified in the constructor.
 
-- *cancel()*
+-   _cancel()_
 
-        Prevent any further authorisation retries. Only applies if token supplied.
+          Prevent any further authorisation retries. Only applies if token supplied.
 
 Events:
 
-- *success(session)*
+-   _success(session)_
 
-        Authorisation of session was successful.
-        Note: Only emitted if a token was supplied in options. Username/key combinations supplied in options are assumed to be valid.
+          Authorisation of session was successful.
+          Note: Only emitted if a token was supplied in options. Username/key combinations supplied in options are assumed to be valid.
 
-- *authorised(session)*
+-   _authorised(session)_
 
-        Deprecated: Use success instead.
-        Authorisation of session was successful.
+          Deprecated: Use success instead.
+          Authorisation of session was successful.
 
-- *retrying(retry)*
+-   _retrying(retry)_
 
-       Authorisation request was not successful but will be retried after a delay. Retry object contains the following properties:  
-       `delay` - The time in milliseconds before the request will be retried.  
-       `error` - The error code returned by the Last.fm API.  
-       `message` - The error message returned by the Last.fm API.
+         Authorisation request was not successful but will be retried after a delay. Retry object contains the following properties:
+         `delay` - The time in milliseconds before the request will be retried.
+         `error` - The error code returned by the Last.fm API.
+         `message` - The error message returned by the Last.fm API.
 
-- *error(track, error)*
+-   _error(track, error)_
 
-        The authorisation was not successful and will not be retried.
+          The authorisation was not successful and will not be retried.
 
 ### LastFmUpdate
 
     lastfm.update(method, session, options);
 
-Returns a `LastFmUpdate` instance. 
+Returns a `LastFmUpdate` instance.
 
 Valid methods are 'nowplaying' and 'scrobble'.
 
@@ -235,34 +240,34 @@ Options:
 
 Accepts all parameters used by track.updateNowPlaying and user.scrobble (see Last.Fm API) as well as:
 
-- *track*
-    
-        Track for nowplaying and scrobble requests. Uses same format as returned by `RecentTracksStream` events.
+-   _track_
 
-- *timestamp*
+          Track for nowplaying and scrobble requests. Uses same format as returned by `RecentTracksStream` events.
 
-        Required for scrobble requests. Timestamp is in unix time (seconds since 01-01-1970 and is in UTC time).
+-   _timestamp_
 
-- *handlers*
+          Required for scrobble requests. Timestamp is in unix time (seconds since 01-01-1970 and is in UTC time).
 
-        Default event handlers to attach to the request object on creation.
+-   _handlers_
+
+          Default event handlers to attach to the request object on creation.
 
 Events:
 
-- *success(track)*
+-   _success(track)_
 
-       Update request was successful. 
+         Update request was successful.
 
-- *retrying(retry)*
+-   _retrying(retry)_
 
-       Scrobble request was not successful but will be retried after a delay. Retry object contains the following properties:  
-       `delay` - The time in milliseconds before the request will be retried.  
-       `error` - The error code returned by the Last.fm API.  
-       `message` - The error message returned by the Last.fm API.
+         Scrobble request was not successful but will be retried after a delay. Retry object contains the following properties:
+         `delay` - The time in milliseconds before the request will be retried.
+         `error` - The error code returned by the Last.fm API.
+         `message` - The error message returned by the Last.fm API.
 
-- *error(track, error)*
+-   _error(track, error)_
 
-        Ruh-roh.
+          Ruh-roh.
 
 ### LastFmInfo
 
@@ -274,40 +279,39 @@ Gets extended info about specified item.
 
 Public properties:
 
-- *itemtype*
+-   _itemtype_
 
-        Any Last.fm item with a getInfo method. eg user, track, artist, etc.
+          Any Last.fm item with a getInfo method. eg user, track, artist, etc.
 
 Options:
 
-- *handlers*
+-   _handlers_
 
-        Event handlers to attach to object at creation.
+          Event handlers to attach to object at creation.
 
-- *various*
+-   _various_
 
-       Params as specified in Last.fm API, eg user: "username"
+         Params as specified in Last.fm API, eg user: "username"
 
 Special cases:
 
 When requesting track info the `track` param can be either the track name or a track object as returned by `RecentTracksStream`.
 
-
 ## Example
 
     var LastFmNode = require('lastfm').LastFmNode;
-    
+
     var lastfm = new LastFmNode({
       api_key: 'abc',
       secret: 'secret'
     });
 
     var trackStream = lastfm.stream('username');
-    
+
     trackStream.on('lastPlayed', function(track) {
       console.log('Last played: ' + track.name);
     });
-    
+
     trackStream.on('nowPlaying', function(track) {
       console.log('Now playing: ' + track.name);
     });
@@ -355,6 +359,6 @@ http://github.com/technoweenie/twitter-node
 
 ## Contributors
 
-* Garret Wilkin (garrettwilkin) - http://geethink.com
-* Uwe L. Korn (xhochy) - http://xhochy.com
-* Max Kueng (maxkueng) - http://maxkueng.com
+-   Garret Wilkin (garrettwilkin) - http://geethink.com
+-   Uwe L. Korn (xhochy) - http://xhochy.com
+-   Max Kueng (maxkueng) - http://maxkueng.com
