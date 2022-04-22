@@ -19,6 +19,7 @@
 	"main": "./lastfm/index",
 	"license": "MIT",
 	"dependencies": {
+		"@billjs/event-emitter": "^1.0.3",
 		"js-md5": "^0.7.3"
 	},
 	"devDependencies": {

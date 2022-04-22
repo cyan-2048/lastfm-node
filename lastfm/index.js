@@ -1,37 +1,38 @@
-var RecentTracksStream = require("./recenttracks-stream"),
+// will only be using a few of the things
+var // RecentTracksStream = require("./recenttracks-stream"),
 	LastFmSession = require("./lastfm-session"),
 	LastFmUpdate = require("./lastfm-update"),
-	LastFmInfo = require("./lastfm-info"),
+	// LastFmInfo = require("./lastfm-info"),
 	LastFmRequest = require("./lastfm-request");
 
-var LastFmNode = (exports.LastFmNode = function (options) {
-	options = options || {};
-	this.url = "/2.0";
-	this.host = options.host || "ws.audioscrobbler.com";
-	this.format = "json";
-	this.secret = options.secret;
-	this.api_key = options.api_key;
-	this.port = undefined || options.port;
-});
+class LastFmNode {
+	constructor(options) {
+		options = options || {};
+		this.url = "/2.0/";
+		this.host = options.host || "http://ws.audioscrobbler.com";
+		this.format = "json";
+		this.secret = options.secret;
+		this.api_key = options.api_key;
+	}
+	request(method, params) {
+		return new LastFmRequest(this, method, params);
+	}
+
+	update(method, session, options) {
+		return new LastFmUpdate(this, method, session, options);
+	}
+	session(user, key) {
+		return new LastFmSession(this, user, key);
+	}
+}
 
 exports.md5 = require("js-md5");
+exports.LastFmNode = LastFmNode;
 
-LastFmNode.prototype.request = function (method, params) {
-	return new LastFmRequest(this, method, params);
-};
+// LastFmNode.prototype.stream = function (user, options) {
+// 	return new RecentTracksStream(this, user, options);
+// };
 
-LastFmNode.prototype.stream = function (user, options) {
-	return new RecentTracksStream(this, user, options);
-};
-
-LastFmNode.prototype.session = function (user, key) {
-	return new LastFmSession(this, user, key);
-};
-
-LastFmNode.prototype.info = function (type, options) {
-	return new LastFmInfo(this, type, options);
-};
-
-LastFmNode.prototype.update = function (method, session, options) {
-	return new LastFmUpdate(this, method, session, options);
-};
+// LastFmNode.prototype.info = function (type, options) {
+// 	return new LastFmInfo(this, type, options);
+// };

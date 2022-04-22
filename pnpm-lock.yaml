@@ -1,16 +1,22 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@billjs/event-emitter': ^1.0.3
   js-md5: ^0.7.3
   tinyify: ^3.0.0
 
 dependencies:
+  '@billjs/event-emitter': 1.0.3
   js-md5: 0.7.3
 
 devDependencies:
   tinyify: 3.0.0
 
 packages:
+
+  /@billjs/event-emitter/1.0.3:
+    resolution: {integrity: sha512-ZvzKYD/Gk9HSq42jCHFlTXb3oJztspH7WTdlVU6WdW3MKk6Jja/wWhxRSpT07aDkU69pqdUl9zx6lpG6/qxO6g==}
+    dev: false
 
   /@goto-bus-stop/common-shake/2.4.0:
     resolution: {integrity: sha512-LO+7v+UbxE3IyAS4Suf/KYB7Zq9DEIHibwDe6Wph4apNEfDyyxP7BSxzRS/Qa9lUH5gsm9eL9nF8EE1E0/nQkQ==}

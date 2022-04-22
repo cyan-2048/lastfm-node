@@ -6,11 +6,17 @@ Changes made by cyan:
 
 -   get rid of underscore dependency
 -   get rid of useragent option(useless imo)
+-   get rid of port option(browser fetch does not have such option)
 -   remove crypto dependency(big bloat, only need md5)
+-   remove http dependency(will use fetch)
+-   use ES6 classes
+-   use more lightweight [EventEmitter](https://github.com/billjs/event-emitter)
+-   remove unnecessary things not needed for zMusic
 
 ## Installation
 
-    npm install lastfm
+    	1. add md5 library script of choice (function name must be `md5()`)
+    	2. add script tag with js file
 
 ## Usage
 
@@ -19,22 +25,11 @@ Changes made by cyan:
     var lastfm = new LastFmNode({
       api_key: 'apikey',    // sign-up for a key at http://www.last.fm/api
       secret: 'secret',
-      useragent: 'appname/vX.X MyApp' // optional. defaults to lastfm-node.
     });
-
-## Tests
-
-Tests currently use a very old testing framework found at https://github.com/mynyml/ntest. You can get them running by cloning that repository and doing
-
-    $ ln -s /path/to/ntest/lib node_modules/ntest
-
-Then run the tests
-
-    $ node tests/
 
 ## Documentation
 
-### LastFmRequest
+### LastFmRequest (all write methods are removed except scrobble and nowplaying)
 
     lastfm.request(method, options);
 
@@ -72,7 +67,7 @@ Events:
 
           Ruh-roh. Either a error returned by Last.fm or a transmission error.
 
-### RecentTracksStream
+### RecentTracksStream (removed, class not implemented)
 
     lastfm.stream(username);
 
@@ -269,7 +264,7 @@ Events:
 
           Ruh-roh.
 
-### LastFmInfo
+### LastFmInfo (removed, class not implemented)
 
     lastfm.info(itemtype, [options]);
 
