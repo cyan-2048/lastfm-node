@@ -2,10 +2,10 @@ var LastFmBase = require("./lastfm-base");
 
 class LastFmSession extends LastFmBase {
 	constructor(lastfm, options, key) {
+		super();
 		options = options || {};
 		var that = this,
 			retry = true;
-		super();
 
 		if (typeof options !== "object") {
 			this.user = options || "";
@@ -50,11 +50,14 @@ class LastFmSession extends LastFmBase {
 			}
 
 			var params = { token: token },
-				request = lastfm.request("auth.getsession", params);
+				request = lastfm.request("auth.getSession", params);
+
+			console.log(params);
 
 			request.on("success", authoriseSession);
 
-			request.on("error", function handleError(error) {
+			request.on("error", function handleError(event) {
+				let error = event.data;
 				if (shouldBeRetried(error)) {
 					if (!retry) {
 						return;
@@ -78,7 +81,8 @@ class LastFmSession extends LastFmBase {
 			return error.error == 14 || error.error == 16 || error.error == 11;
 		}
 
-		function authoriseSession(result) {
+		function authoriseSession(event) {
+			let result = event.data;
 			if (!result.session) {
 				that.emit("error", new Error("Unexpected error"));
 				return;

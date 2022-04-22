@@ -1,6 +1,7 @@
 var LastFmBase = require("./lastfm-base");
 class LastFmUpdate extends LastFmBase {
 	constructor(lastfm, method, session, options) {
+		super();
 		var retryOnErrors = [
 				11, // Service offline
 				16, // Temporarily unavailable
@@ -17,7 +18,6 @@ class LastFmUpdate extends LastFmBase {
 
 		var that = this;
 		options = options || {};
-		super();
 
 		registerEventHandlers(options);
 
@@ -57,13 +57,15 @@ class LastFmUpdate extends LastFmBase {
 				request.on("success", successCallback);
 			}
 
-			function successCallback(response) {
+			function successCallback(event) {
+				let response = event.data;
 				if (response) {
 					that.emit("success", options.track);
 				}
 			}
 
-			function errorCallback(error) {
+			function errorCallback(event) {
+				let error = event.data;
 				if (shouldBeRetried(error)) {
 					var delay = delayFor(retryCount++),
 						retry = {

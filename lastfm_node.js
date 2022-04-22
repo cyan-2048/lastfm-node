@@ -56,7 +56,7 @@
 			const handlers = this._eventHandlers[type];
 			if (!handlers || !handlers.length) return;
 			const event = this.createEvent(type, data);
-			for (const handler of handlers) {
+			for (let handler of handlers) {
 				if (!this.isValidHandler(handler)) continue;
 				if (handler._once) event.once = true;
 				handler(event);
@@ -124,6 +124,7 @@
 
 	class LastFmUpdate extends LastFmBase {
 		constructor(lastfm, method, session, options) {
+			super();
 			var retryOnErrors = [
 					11, // Service offline
 					16, // Temporarily unavailable
@@ -140,7 +141,6 @@
 
 			var that = this;
 			options = options || {};
-			super();
 
 			registerEventHandlers(options);
 
@@ -180,13 +180,15 @@
 					request.on("success", successCallback);
 				}
 
-				function successCallback(response) {
+				function successCallback(event) {
+					let response = event.data;
 					if (response) {
 						that.emit("success", options.track);
 					}
 				}
 
-				function errorCallback(error) {
+				function errorCallback(event) {
+					let error = event.data;
 					if (shouldBeRetried(error)) {
 						var delay = delayFor(retryCount++),
 							retry = {
@@ -225,10 +227,10 @@
 
 	class LastFmSession extends LastFmBase {
 		constructor(lastfm, options, key) {
+			super();
 			options = options || {};
 			var that = this,
 				retry = true;
-			super();
 
 			if (typeof options !== "object") {
 				this.user = options || "";
@@ -273,11 +275,14 @@
 				}
 
 				var params = { token: token },
-					request = lastfm.request("auth.getsession", params);
+					request = lastfm.request("auth.getSession", params);
+
+				console.log(params);
 
 				request.on("success", authoriseSession);
 
-				request.on("error", function handleError(error) {
+				request.on("error", function handleError(event) {
+					let error = event.data;
 					if (shouldBeRetried(error)) {
 						if (!retry) {
 							return;
@@ -301,7 +306,8 @@
 				return error.error == 14 || error.error == 16 || error.error == 11;
 			}
 
-			function authoriseSession(result) {
+			function authoriseSession(event) {
+				let result = event.data;
 				if (!result.session) {
 					that.emit("error", new Error("Unexpected error"));
 					return;
@@ -328,6 +334,7 @@
 
 	class LastFmRequest extends LastFmBase {
 		constructor(lastfm, method, params) {
+			super();
 			var WRITE_METHODS = ["track.scrobble", "track.updatenowplaying"],
 				SIGNED_METHODS = [
 					"auth.getmobilesession",
@@ -339,7 +346,6 @@
 					"user.getrecommendedevents",
 				];
 			var that = this;
-			super();
 			params = params || {};
 
 			that.registerHandlers(params.handlers);

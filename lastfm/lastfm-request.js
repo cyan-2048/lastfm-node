@@ -5,6 +5,7 @@ var //http = require("http"),
 
 class LastFmRequest extends LastFmBase {
 	constructor(lastfm, method, params) {
+		super();
 		var WRITE_METHODS = [
 				//		"album.addtags",
 				//		"album.removetag",
@@ -47,7 +48,6 @@ class LastFmRequest extends LastFmBase {
 				"user.getrecommendedevents",
 			];
 		var that = this;
-		super();
 		params = params || {};
 
 		that.registerHandlers(params.handlers);
